@@ -23,12 +23,12 @@
 		<version.maven-bundle-plugin>3.2.0</version.maven-bundle-plugin>
 		<jboss.fuse.bom.version>6.3.0.redhat-224</jboss.fuse.bom.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- the version of the BOM, defining all the dependency versions
+		
+		<!-- the version of the BOM, defining all the dependency versions -->
 		<fabric.version>1.2.0.redhat-630187</fabric.version>
 		<fabric8.profile>caso2</fabric8.profile>
 		<fabric8.parentProfiles>jboss-fuse-full</fabric8.parentProfiles>
-		<fabric8.features></fabric8.features>
-		 -->
+		<fabric8.features>camel-string-template camel-jetty9 camel-script-groovy camel-mail</fabric8.features>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -188,15 +188,12 @@
 					<fileApplicationContextUri>src/main/resources/META-INF/spring/camel-context.xml</fileApplicationContextUri>
 				</configuration>
 			</plugin>
-			<!--
 			<plugin>
-				 this plugin will use the fabric.* properties to configure its behaviour 
-					see the Properties section here: http://fabric8.io/gitbook/mavenPlugin.html 
+				<!-- this plugin will use the fabric.* properties to configure its behaviour  see the Properties section here: http://fabric8.io/gitbook/mavenPlugin.html --> 
 				<groupId>io.fabric8</groupId>
 				<artifactId>fabric8-maven-plugin</artifactId>
 				<version>1.2.0.redhat-630187</version>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 </project>

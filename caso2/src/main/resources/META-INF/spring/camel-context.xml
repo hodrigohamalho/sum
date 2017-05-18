@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:ctx="http://www.springframework.org/schema/context"
     xmlns:osgi="http://www.springframework.org/schema/osgi"
     xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
-    xmlns:ctx="http://www.springframework.org/schema/context"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        
-    http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd  
-    http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd             http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd       http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd     http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean class="com.mycompany.Processor" id="processor"/>
-    
     <!-- Getting the properties file from OSGi -->
-    <osgix:cm-properties id="environment-variables"  persistent-id="caso2">
+    <osgix:cm-properties id="environment-variables" persistent-id="caso2">
         <prop key="queueName">sum</prop>
         <prop key="smtp.host">localhost</prop>
         <prop key="smtp.port">2525</prop>
         <prop key="smtp.to">rramalho@redhat.com</prop>
         <prop key="smtp.from">hodrigohamalho@gmail.com</prop>
     </osgix:cm-properties>
-    
     <!-- Injecting the properties file in Spring Container -->
     <ctx:property-placeholder properties-ref="environment-variables"/>
-    
     <camelContext id="caso2" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="properties" location="ref:environment-variables"/>
         <onException id="_exception-validate">
@@ -34,7 +26,7 @@
                 <constant>&lt;result&gt;NOK&lt;/result&gt;</constant>
             </setBody>
         </onException>
-        <restConfiguration component="jetty" port="8182"/>
+        <restConfiguration component="jetty" />
         <rest id="rest-path-caso2" path="/caso2">
             <get uri="/{num1}/{num2}">
                 <to uri="direct:rest"/>

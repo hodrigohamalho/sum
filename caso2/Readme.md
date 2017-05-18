@@ -26,6 +26,7 @@ Setup ActiveMQ
 Install features:
 
 ```
+	features:install camel-mail
 	features:install camel-string-template
 	features:install camel-jetty9
 	features:install camel-script-groovy
@@ -41,6 +42,7 @@ To deploy using Fuse:
 Testing the routes:
 
 REST: http://localhost:8182/caso2/1/2
+
 SOAP: http://localhost:8181/cxf/Sum?wsdl
 
 
