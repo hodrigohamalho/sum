@@ -1,0 +1,19 @@
+== Caso de uso
+. Entrada por WebService e REST passando por parâmetro 2 números inteiros
+. Webservice e REST devem retornar de forma síncrona um "OK"
+. Fluxo de integração soma os dois valores enviados
+. Fluxo de integração grava o valor em uma fila no Active-MQ
+. Um outro fluxo de integração retira a mensagem do Active-MQ e salva o valor em um arquivo "TXT"
+
+== Fluxo alternativo 1
+. Entrada por WebService e REST passando por parâmetro 1 número inteiro e uma string
+. Webservice e REST devem validar a string e retornar "NOK"
+
+== Fluxo alternativo 2
+. Entrada por WebService e REST passando por parâmetro 2 números inteiros
+. Webservice e REST devem retornar de forma síncrona um "OK"
+. Fluxo de integração soma os dois valores enviados
+. Fluxo de integração tenta salvar o valor em uma fila no Active-MQ e o mesmo está indisponível
+. Sistema registra o erro no log e envia um e-mail para um destinatário pré-determinado
+
+TIP: Cada passo deve ser registrado em um log.
