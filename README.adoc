@@ -1,19 +1,63 @@
-== Caso de uso
-. Entrada por WebService e REST passando por parâmetro 2 números inteiros
-. Webservice e REST devem retornar de forma síncrona um "OK"
-. Fluxo de integração soma os dois valores enviados
-. Fluxo de integração grava o valor em uma fila no Active-MQ
-. Um outro fluxo de integração retira a mensagem do Active-MQ e salva o valor em um arquivo "TXT"
+== Sum Project
 
-== Fluxo alternativo 1
-. Entrada por WebService e REST passando por parâmetro 1 número inteiro e uma string
-. Webservice e REST devem validar a string e retornar "NOK"
+This is a simple project to demonstrate a couple of EIPs applied using Red Hat Jboss Fuse.
 
-== Fluxo alternativo 2
-. Entrada por WebService e REST passando por parâmetro 2 números inteiros
-. Webservice e REST devem retornar de forma síncrona um "OK"
-. Fluxo de integração soma os dois valores enviados
-. Fluxo de integração tenta salvar o valor em uma fila no Active-MQ e o mesmo está indisponível
-. Sistema registra o erro no log e envia um e-mail para um destinatário pré-determinado
+Basically this project receive two values via webservice SOAP and REST and sum it saving the result in a file system.
 
-TIP: Cada passo deve ser registrado em um log.
+=== Use case
+. Receive two integer parameters via REST and SOAP 
+. Imediatly return a "OK" String to a valid two integers values 
+. Imediatly return a "NOK" String to a non valid two integers values 
+. Send in background the two values to sum 
+. Send the result to a Active-MQ queue
+. Retrieve the result from the queue and save in a file 
+. In case of the queue is unavailable, handle the error and send an email to a previously configured account 
+. Mail configuration and queue names could be changed in a file outside the project
+
+=== Build 
+
+To build this project use:
+	
+	mvn clean install
+
+=== Requirements
+
+* Red Hat Jboss Fuse 6.3
+* SMTP server. 
+I used the fake-smtp.jar to mock a mail server. To run:
+
+	java -jar resources/fake-smtp.jar 
+
+And specify port 2525.
+
+=== Running the application
+
+From the Jboss Fuse CLI use:
+
+Setup ActiveMQ
+ 
+    jms:create -t ActiveMQ -u tcp://localhost:61616 pepe
+
+Install features
+
+	features:install camel-string-template
+	features:install camel-jetty9
+	features:install camel-script-groovy
+
+To deploy in Fuse standalone:
+
+	install -s mvn:com.redhat.fuse/sum/1.0
+
+To deploy in Fuse Fabric
+
+	mvn fabric8:deploy
+
+=== Test the route 
+
+REST: http://localhost:8183/sum/1/2
+
+SOAP: http://localhost:8181/cxf/Sum?wsdl
+
+You should see a OK as result.
+
+And inspect the file inside your $FUSE_HOME/sumDir to show the results of the sum.
