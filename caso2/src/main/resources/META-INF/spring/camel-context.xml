@@ -26,7 +26,7 @@
                 <constant>&lt;result&gt;NOK&lt;/result&gt;</constant>
             </setBody>
         </onException>
-        <restConfiguration component="jetty" />
+        <restConfiguration component="jetty" port="8183"/>
         <rest id="rest-path-caso2" path="/caso2">
             <get uri="/{num1}/{num2}">
                 <to uri="direct:rest"/>
