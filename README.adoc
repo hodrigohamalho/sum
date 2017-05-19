@@ -52,6 +52,18 @@ To deploy in Fuse Fabric
 
 	mvn fabric8:deploy
 
+To override properties, is necessary to create file called sum.cfg in $FUSE_HOME/etc directory. 
+
+An example of an file with supported properties above:
+
+	queueName=soma
+	smtp.host=localhost
+	smtp.port=2525
+	smtp.to=afranco@redhat.com
+	smtp.from=hodrigohamalho@gmail.com
+
+To test the unavailable message queue, a easy way is stopping openwire connector from the ActiveMQ tab panel in the Fuse web console (Hawtio)
+
 === Test the route 
 
 REST: http://localhost:8183/sum/1/2

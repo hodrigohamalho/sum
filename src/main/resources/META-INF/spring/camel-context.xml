@@ -6,7 +6,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd             http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd       http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd     http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean class="com.mycompany.Processor" id="processor"/>
     <!-- Getting the properties file from OSGi -->
-    <osgix:cm-properties id="environment-variables" persistent-id="caso2">
+    <osgix:cm-properties id="environment-variables" persistent-id="sum">
         <prop key="queueName">sum</prop>
         <prop key="smtp.host">localhost</prop>
         <prop key="smtp.port">2525</prop>
