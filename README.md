@@ -48,18 +48,6 @@ Access the project in: https://127.0.0.1:8443/console/project/fis
 	Pass: developer
 
 	
-To override properties, is necessary to create file called sum.cfg in $FUSE_HOME/etc directory. 
-
-An example of an file with supported properties above:
-
-	queueName=soma
-	smtp.host=localhost
-	smtp.port=2525
-	smtp.to=afranco@redhat.com
-	smtp.from=hodrigohamalho@gmail.com
-
-To test the unavailable message queue, a easy way is stopping openwire connector from the ActiveMQ tab panel in the Fuse web console (Hawtio)
-
 === Test the route 
 
 REST: http://localhost:8183/sum/1/2
@@ -68,4 +56,4 @@ SOAP: http://localhost:8181/services/Sum?wsdl
 
 You should see a OK as result.
 
-And inspect the file inside your ./sumDir to show the results of the sum.
+To see the file saving the results, click on Terminal inside the POD and look at /deployments/sumDir.

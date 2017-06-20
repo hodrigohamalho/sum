@@ -58,15 +58,15 @@
                     <constant>ActiveMQ not available</constant>
                 </setBody>
                 <to id="mountTemplate" uri="string-template:email-template.tm"/>
-                <to id="sendEmail" uri="smtp:localhost:2525?to=rramalho@redhat.com&amp;from=hodrigohamalho@gmail.com"/>
+                <to id="sendEmail" uri="smtp:{{smtp.host}}:{{smtp.port}}?to={{smtp.to}}&amp;from={{smtp.from}}"/>
             </onException>
             <setBody id="_sum-result">
                 <groovy>"&lt;result&gt;"+(exchange.properties.num1.toInteger() + exchange.properties.num2.toInteger()).toString()+"&lt;/result&gt;\n"</groovy>
             </setBody>
-            <to id="_to1" uri="amq:queue:${queueName}?disableReplyTo=true"/>
+            <to id="_to1" uri="amq:queue:{{queueName}}?disableReplyTo=true"/>
         </route>
         <route id="amqToFile">
-            <from id="_get-from-file" uri="amq:queue:${queueName}"/>
+            <from id="_get-from-file" uri="amq:queue:{{queueName}}"/>
             <to id="_to2" uri="file:sumDir?fileExist=Append&amp;fileName=sum.txt"/>
         </route>
         <route id="wiretap">
