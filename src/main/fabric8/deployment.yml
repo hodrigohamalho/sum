@@ -1,0 +1,37 @@
+spec:
+  template:
+    spec:
+      containers:
+        -
+          resources:
+            requests:
+              cpu: "0.2"
+              memory: 256Mi
+            limits:
+              cpu: "1.0"
+              memory: 256Mi
+          env:
+          - name: ACTIVEMQ_SERVICE_NAME
+            value: broker-amq-tcp
+          - name: ACTIVEMQ_BROKER_USERNAME
+            value: redhat
+          - name: ACTIVEMQ_BROKER_PASSWORD
+            value: redhat
+          - name: CXF_PATH
+            value: /services
+          - name: SMTP_HOST
+            value: localhost
+          - name: SMTP_PORT
+            value: 2525
+          - name: SMTP_TO
+            value: rramalho@redhat.com
+          - name: SMTP_FROM
+            value: hodrigohamalho@gmail.com
+          - name: queueName
+            value: sum
+          - name: apiContext
+            value: /api
+          - name: APIDOC_HOST
+            value: 0.0.0.0
+          - name: APIDOC_PORT
+            value: 8080

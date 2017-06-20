@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:ctx="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="                       http://www.springframework.org/schema/beans           http://www.springframework.org/schema/beans/spring-beans.xsd                       http://www.springframework.org/schema/context           http://www.springframework.org/schema/context/spring-context.xsd               http://camel.apache.org/schema/spring           http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean class="com.rramalho.sum.Processor" id="processor"/>
+    <!-- Injecting the properties file in Spring Container -->
+    <camelContext id="sum" xmlns="http://camel.apache.org/schema/spring">
+        <onException id="_exception-validate">
+            <exception>org.apache.camel.processor.validation.PredicateValidationException</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <setBody id="_NOK">
+                <constant>&lt;result&gt;NOK&lt;/result&gt;</constant>
+            </setBody>
+        </onException>
+        <rest id="rest-path-sum" path="/sum">
+            <get uri="/{num1}/{num2}">
+                <to uri="direct:rest"/>
+            </get>
+        </rest>
+        <route id="rest">
+            <from id="get:/sum/num1/num2" uri="direct:rest"/>
+            <validate id="_check-integers">
+                <groovy>request.headers.get("num1").isInteger() &amp;&amp; request.headers.get("num2").isInteger() </groovy>
+            </validate>
+            <setProperty id="_num1" propertyName="num1">
+                <simple>${header.num1}</simple>
+            </setProperty>
+            <setProperty id="_num2" propertyName="num2">
+                <simple>${header.num2}</simple>
+            </setProperty>
+            <to id="_to3" uri="direct:wiretap"/>
+        </route>
+        <route id="ws">
+            <from id="_ws-from-wsdl" uri="cxf://Sum?dataFormat=PAYLOAD&amp;wsdlURL=classpath:wsdl/exemplo.wsdl"/>
+            <setProperty id="num1" propertyName="num1">
+                <simple>${body.getBody().get(0).getTextContent()}</simple>
+            </setProperty>
+            <setProperty id="num2" propertyName="num2">
+                <simple>${body.getBody().get(1).getTextContent()}</simple>
+            </setProperty>
+            <validate id="check-integers">
+                <groovy>exchange.properties.num1.isInteger() &amp;&amp; exchange.properties.num2.isInteger() </groovy>
+            </validate>
+            <to id="_to4" uri="direct:wiretap"/>
+        </route>
+        <route id="sum">
+            <from id="_sum-values" uri="direct:sum"/>
+            <onException id="if-amq-down">
+                <exception>javax.jms.JMSException</exception>
+                <redeliveryPolicy maximumRedeliveries="0"/>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log id="_not-available" message="ActiveMQ not available, sending email.."/>
+                <setBody id="amq-not-available">
+                    <constant>ActiveMQ not available</constant>
+                </setBody>
+                <to id="mountTemplate" uri="string-template:email-template.tm"/>
+                <to id="sendEmail" uri="smtp:localhost:2525?to=rramalho@redhat.com&amp;from=hodrigohamalho@gmail.com"/>
+            </onException>
+            <setBody id="_sum-result">
+                <groovy>"&lt;result&gt;"+(exchange.properties.num1.toInteger() + exchange.properties.num2.toInteger()).toString()+"&lt;/result&gt;\n"</groovy>
+            </setBody>
+            <to id="_to1" uri="amq:queue:${queueName}?disableReplyTo=true"/>
+        </route>
+        <route id="amqToFile">
+            <from id="_get-from-file" uri="amq:queue:${queueName}"/>
+            <to id="_to2" uri="file:sumDir?fileExist=Append&amp;fileName=sum.txt"/>
+        </route>
+        <route id="wiretap">
+            <from id="_from-wiretap" uri="direct:wiretap"/>
+            <wireTap id="tap-sum-calculation" uri="direct:sum"/>
+            <setBody id="_OK">
+                <constant>&lt;result&gt;OK&lt;/result&gt;</constant>
+            </setBody>
+        </route>
+    </camelContext>
+</beans>
