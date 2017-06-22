@@ -6,10 +6,10 @@ spec:
           resources:
             requests:
               cpu: "0.2"
-              memory: 256Mi
+              memory: 512Mi
             limits:
               cpu: "1.0"
-              memory: 256Mi
+              memory: 512Mi
           env:
           - name: ACTIVEMQ_SERVICE_NAME
             value: broker-amq-tcp
@@ -32,6 +32,6 @@ spec:
           - name: apiContext
             value: /api
           - name: APIDOC_HOST
-            value: 0.0.0.0
+            value: sum-fis.192.168.14.238.xip.io
           - name: APIDOC_PORT
-            value: 8080
+            value: 80
