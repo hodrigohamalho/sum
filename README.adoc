@@ -1,6 +1,8 @@
-== Sum Project
+== Sum Application
 
-This is a simple project to demonstrate a couple of EIPs applied using Red Hat Jboss Fuse.
+=== Fuse Integration Services Version
+
+This is a simple project to demonstrate a couple of EIPs applied using Red Hat Jboss Fuse
 
 Basically this project receive two values via webservice SOAP and REST and sum it saving the result in a file system.
 
