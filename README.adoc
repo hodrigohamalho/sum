@@ -1,0 +1,77 @@
+== Sum Project
+
+This is a simple project to demonstrate a couple of EIPs applied using Red Hat Jboss Fuse.
+
+Basically this project receive two values via webservice SOAP and REST and sum it saving the result in a file system.
+
+=== Use case
+. Receive two integer parameters via REST and SOAP 
+. Imediatly return a "OK" String to a valid two integers values 
+. Imediatly return a "NOK" String to a non valid two integers values 
+. Send in background the two values to sum 
+. Send the result to a Active-MQ queue
+. Retrieve the result from the queue and save in a file 
+. In case of the queue is unavailable, handle the error and send an email to a previously configured account 
+. Mail configuration and queue names could be changed in a file outside the project
+
+=== Build 
+
+To build this project use:
+	
+	mvn clean install
+
+=== Requirements
+
+* Red Hat Jboss Fuse 6.3
+
+=== Running the application
+
+==== Local (Just Springboot)
+
+	mvn spring-boot:run
+
+To test the SMTP service, you need to use the fake-smtp.jar to mock a mail server. To run:
+
+	java -jar resources/fake-smtp.jar 
+
+And specify port `2525`.
+
+==== Openshift
+
+Running containerized openshift installation just with "oc" client. The parameter `--metrics` is optional. 
+It enables the metrics component, disable  if you have limited resources on your notebook.
+
+The oc client could be download here: https://access.redhat.com/downloads/content/290
+
+	oc cluster up --ocp-tag=v3.5 --metrics
+
+Once it is running: 
+
+	sh support/setup.sh
+
+For windows environments, run the following:
+
+	oc login -u system:admin
+	oc create -f support/jboss-image-streams.json -n openshift
+	oc create -f support/fis-image-streams.json -n openshift	
+	oc login -u developer -p developer
+	oc new-project fis
+
+Now deploy de application:
+
+	mvn fabric8:deploy
+	
+Access the project in: https://127.0.0.1:8443/console/project/fis
+
+	User: developer
+	Pass: developer
+	
+=== Test the route 
+
+REST: http://localhost:8183/sum/1/2
+
+SOAP: http://localhost:8181/services/Sum?wsdl
+
+You should see a OK as result.
+
+To see the file saving the results, click on Terminal inside the POD and look at /deployments/sumDir.
