@@ -32,6 +32,6 @@ spec:
           - name: apiContext
             value: /api
           - name: APIDOC_HOST
-            value: sum-fis.192.168.14.238.xip.io
+            value: sum-fis.127.0.0.1.xip.io
           - name: APIDOC_PORT
             value: 80

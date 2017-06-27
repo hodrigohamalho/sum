@@ -58,7 +58,7 @@
                     <constant>ActiveMQ not available</constant>
                 </setBody>
                 <to id="mountTemplate" uri="string-template:email-template.tm"/>
-                <to id="sendEmail" uri="smtp:{{smtp.host}}:{{smtp.port}}?to={{smtp.to}}&amp;from={{smtp.from}}"/>
+                <to id="sendEmail" uri="smtp:{{smtp.host}}:2525?to={{smtp.to}}&amp;from={{smtp.from}}"/>
             </onException>
             <setBody id="_sum-result">
                 <groovy>"&lt;result&gt;"+(exchange.properties.num1.toInteger() + exchange.properties.num2.toInteger()).toString()+"&lt;/result&gt;\n"</groovy>
@@ -77,4 +77,16 @@
             </setBody>
         </route>
     </camelContext>
+    <!--  configure the scribe span collector with the hostname and port for the Zipkin Collector Server 
+	<bean id="scribe" class="com.github.kristofa.brave.scribe.ScribeSpanCollector">
+		<constructor-arg index="0" value="${camel.zipkin.host-name}" />
+		<constructor-arg index="1" value="${camel.zipkin.port}" />
+	</bean>
+	-->
+    <!--  setup zipkin tracer 
+	<bean id="zipkinTracer" class="org.apache.camel.zipkin.ZipkinTracer">
+		<property name="serviceName" value="sum" />
+		<property name="spanCollector" ref="scribe" />
+	</bean> 
+	 -->
 </beans>
