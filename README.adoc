@@ -1,5 +1,7 @@
 == Sum Application
 
+If you want the FIS version, use the FIS branch.
+
 === Red Hat Jboss Fuse 6.3 - Karaf Version
 
 This is a simple project to demonstrate a couple of EIPs applied using Red Hat Jboss Fuse.
