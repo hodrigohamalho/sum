@@ -70,7 +70,7 @@ To test the unavailable message queue, a easy way is stopping openwire connector
 
 === Test the route 
 
-REST: http://localhost:8183/sum/1/2
+REST: http://localhost:8183/caso2/1/2
 
 SOAP: http://localhost:8181/cxf/Sum?wsdl
 
